@@ -1,0 +1,24 @@
+services:
+  # Servicio de la API (Backend)
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    networks:
+      - house-net
+
+  # Servicio de Streamlit (Frontend)
+  streamlit:
+    build: ./streamlit_app
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
+    environment:
+      - API_URL=http://model:8000/predict
+    networks:
+      - house-net
+
+networks:
+  house-net:
+    driver: bridge
